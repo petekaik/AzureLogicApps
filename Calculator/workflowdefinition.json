@@ -1,0 +1,70 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "Initialize_variable": {
+        "inputs": {
+          "variables": [
+            {
+              "name": "a",
+              "type": "Integer",
+              "value": "@triggerBody()?['a']"
+            }
+          ]
+        },
+        "runAfter": {},
+        "type": "InitializeVariable"
+      },
+      "Initialize_variable_2": {
+        "inputs": {
+          "variables": [
+            {
+              "name": "b",
+              "type": "Integer",
+              "value": "@triggerBody()?['b']"
+            }
+          ]
+        },
+        "runAfter": {
+          "Initialize_variable": ["Succeeded"]
+        },
+        "type": "InitializeVariable"
+      },
+      "Response_2": {
+        "inputs": {
+          "body": {
+            "sum": "@add(variables('a'),variables('b'))"
+          },
+          "statusCode": 200
+        },
+        "kind": "Http",
+        "runAfter": {
+          "Initialize_variable_2": ["Succeeded"]
+        },
+        "type": "Response"
+      }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "parameters": {},
+    "triggers": {
+      "manual": {
+        "inputs": {
+          "schema": {
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "kind": "Http",
+        "type": "Request"
+      }
+    }
+  }
+}
